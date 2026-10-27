@@ -10,6 +10,15 @@ It is a **viewer, not a validator**: it does not check overlaps or the submissio
 metric notebook for that. `L` follows the metric's bounding-box definition (max of the x- and y-extent of all
 corners), computed in float64 rather than mpmath.
 
+## Live demo
+
+- Full competition baseline (1000 grid packings, the official `sample_submission.csv`): **https://rusiek.github.io/squares-in-squares-vis/**
+- Tiny example with a rotated square (Göbel's n = 5, L = 2 + 1/√2): **https://rusiek.github.io/squares-in-squares-vis/goebel.html**
+
+Both pages are exactly what `sis-vis` produces (`--cdn` variant); sources in `docs/`.
+
+![viewer screenshot](docs/screenshot.png)
+
 ## Install
 
 ```bash
