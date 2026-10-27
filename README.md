@@ -12,13 +12,12 @@ corners), computed in float64 rather than mpmath.
 
 ## Live demo
 
-- Seven small, valid but deliberately suboptimal packings, n = 4…10 (`docs/examples.csv`): **https://rusiek.github.io/squares-in-squares-vis/examples.html**
-
-Both pages are exactly what `sis-vis` produces (`--cdn` variant); sources in `docs/`.
+**https://rusiek.github.io/squares-in-squares-vis/examples.html** — seven small, valid but deliberately suboptimal
+packings for n = 4…10 (`docs/examples.csv`), exactly as `sis-vis --cdn` produces the page. Deep link to a puzzle: `#n=9`.
 
 ![viewer demo](docs/demo.gif)
 
-GitHub strips scripts from READMEs, so the animation above is a recording; the live pages are interactive.
+(GitHub strips scripts from READMEs, so this is a recording; the live page is interactive.)
 
 ## Install
 
@@ -48,8 +47,14 @@ v.show(5)          # one packing inline (plotly figure)
 v.show_scores()    # score_n over n
 ```
 
-Input: the competition's CSV format (`id,n,square_id,x,y,angle`, angle in radians, unit squares).
+Static previews for notebooks whose saved view cannot run JavaScript (e.g. Kaggle):
 
+```python
+from squares_in_squares_vis.static import draw, draw_scores   # pip install "squares-in-squares-vis[preview]"
+draw(v, 5); draw_scores(v)                                     # matplotlib figures
+```
+
+Input: the competition's CSV format (`id,n,square_id,x,y,angle`, angle in radians, unit squares).
 
 ## Develop
 
@@ -60,4 +65,4 @@ pip install -e ".[test]" && pytest -q
 
 ## Licence
 
-Apache-2.0. The same viewer is published as a Kaggle notebook; this repository is the installable version.
+Apache-2.0.
