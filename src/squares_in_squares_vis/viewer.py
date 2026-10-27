@@ -180,6 +180,9 @@ class PackingViewer:
         self.figure(n).show()
 
     def show_scores(self):
+        self.scores_figure().show()
+
+    def scores_figure(self):
         """score_n over n, with the grid ceiling for reference."""
         import plotly.graph_objects as go
         ns = sorted(self.L)
@@ -190,7 +193,7 @@ class PackingViewer:
                         line={"color": COLORS["aligned"], "width": 1.5})
         fig.update_layout(title=f"{self.src.name}: total {self.total():.6f} (overlaps not checked)", width=760,
                           height=360, template="plotly_white", xaxis_title="n", yaxis_title="score_n = L/√n − 1")
-        fig.show()
+        return fig
 
 
 PAGE = r"""<!doctype html>
