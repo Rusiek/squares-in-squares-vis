@@ -13,7 +13,7 @@ corners), computed in float64 rather than mpmath.
 ## Live demo
 
 - Full competition baseline (1000 grid packings, the official `sample_submission.csv`): **https://rusiek.github.io/squares-in-squares-vis/**
-- Tiny example with a rotated square (Göbel's n = 5, L = 2 + 1/√2): **https://rusiek.github.io/squares-in-squares-vis/goebel.html**
+- Tiny example with a rotated square (Göbel's n = 5, L = 2 + 1/√2): **https://rusiek.github.io/squares-in-squares-vis/goebel.html** (deep link to a puzzle: append `#n=5`)
 
 Both pages are exactly what `sis-vis` produces (`--cdn` variant); sources in `docs/`.
 
