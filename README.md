@@ -17,7 +17,9 @@ corners), computed in float64 rather than mpmath.
 
 Both pages are exactly what `sis-vis` produces (`--cdn` variant); sources in `docs/`.
 
-![viewer screenshot](docs/screenshot.png)
+![viewer demo](docs/demo.gif)
+
+GitHub strips scripts from READMEs, so the animation above is a recording; the live pages are interactive.
 
 ## Install
 
