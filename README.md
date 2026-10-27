@@ -50,8 +50,9 @@ v.show_scores()    # score_n over n
 Static previews for notebooks whose saved view cannot run JavaScript (e.g. Kaggle):
 
 ```python
-from squares_in_squares_vis.static import draw, draw_scores   # pip install "squares-in-squares-vis[preview]"
+from squares_in_squares_vis.static import draw, draw_grid, draw_scores   # pip install "squares-in-squares-vis[preview]"
 draw(v, 5); draw_scores(v)                                     # matplotlib figures
+draw_grid(v, ncols=4)                                          # all packings as a 4-per-row grid of panels
 ```
 
 Input: the competition's CSV format (`id,n,square_id,x,y,angle`, angle in radians, unit squares).

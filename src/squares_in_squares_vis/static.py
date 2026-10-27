@@ -57,3 +57,42 @@ def draw_scores(viewer: PackingViewer, show: bool = True):
     if show:
         plt.show()
     return fig
+
+
+def draw_grid(viewer: PackingViewer, ns=None, ncols: int = 4, cell: float = 3.6, show: bool = True):
+    """Several packings as a grid of panels (ncols per row); squares coloured by angle class, bounding square, title
+    with n, L and score_n. Returns the matplotlib Figure."""
+    import math
+
+    import matplotlib.pyplot as plt
+    from matplotlib.collections import PolyCollection
+
+    ns = sorted(viewer.L) if ns is None else list(ns)
+    nrows = max(1, math.ceil(len(ns) / ncols))
+    fig, axes = plt.subplots(nrows, ncols, figsize=(cell * ncols, cell * nrows), squeeze=False)
+    for ax in axes.flat:
+        ax.set_axis_off()
+    for ax, n in zip(axes.flat, ns):
+        rows, e = viewer.packings[n], viewer.entry(n)
+        c, L, (x0, y0) = corners(rows), viewer.L[n], e["o"]
+        rot, near = set(e["r"]), set(e["q"])
+        cls = ["rotated" if k in rot else "near" if k in near else "aligned" for k in range(len(rows))]
+        for key in ("aligned", "near", "rotated"):
+            idx = [k for k, g in enumerate(cls) if g == key]
+            if idx:
+                ax.add_collection(PolyCollection(c[idx], facecolors=COLORS[key], edgecolors="white", linewidths=0.4,
+                                                 alpha=0.9))
+        ax.plot([x0, x0 + L, x0 + L, x0, x0], [y0, y0, y0 + L, y0 + L, y0], color=COLORS["box"], lw=1.0)
+        ax.set_axis_on()
+        ax.set_aspect("equal")
+        ax.autoscale_view()
+        ax.margins(0.03)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        for s in ax.spines.values():
+            s.set_visible(False)
+        ax.set_title(f"n = {n}   L = {L:.4f}   score {viewer.score(n):.4f}", fontsize=9)
+    fig.tight_layout()
+    if show:
+        plt.show()
+    return fig

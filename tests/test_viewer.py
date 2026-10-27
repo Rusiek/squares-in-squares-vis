@@ -78,3 +78,13 @@ def test_static_previews(tiny, tmp_path):
     fig = static.draw(v, 5, show=False)
     assert fig.axes[0].get_title().startswith("n = 5")
     assert static.draw_scores(v, show=False).axes[0].get_xlabel() == "n"
+
+
+def test_draw_grid(tiny, tmp_path):
+    import matplotlib
+    matplotlib.use("Agg")
+    from squares_in_squares_vis import static
+    v = pv.PackingViewer(tiny, tmp_path / "o.html")
+    fig = static.draw_grid(v, ncols=2, show=False)
+    titles = [a.get_title() for a in fig.axes if a.get_title()]
+    assert len(fig.axes) == 4 and len(titles) == 3 and titles[0].startswith("n = 1")
