@@ -1,4 +1,4 @@
-# squares-in-squares-vis
+# Kaggle: Visualize Squares in Squares
 
 Interactive viewer for submission files of the Kaggle competition
 [Squares in Squares](https://www.kaggle.com/competitions/squares-in-squares): one self-contained HTML page that shows
