@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Packing Viewer</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<style>
+:root {
+  color-scheme: light;
+  --surface: #fcfcfb; --surface-2: #f1f0ed; --border: #d6d5d0;
+  --text: #0b0b0b; --text-2: #52514e; --muted: #8a8984; --grid: #e6e5e1;
+  --aligned: #2a78d6; --rotated: #eb6834; --near: #1baf7a; --box: #0b0b0b; --ceil: #b0afa9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface: #1a1a19; --surface-2: #262624; --border: #3d3d3a;
+    --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e88; --grid: #2e2e2c;
+    --aligned: #3987e5; --rotated: #d95926; --near: #199e70; --box: #f0efec; --ceil: #5c5b57;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #1a1a19; --surface-2: #262624; --border: #3d3d3a;
+  --text: #f0efec; --text-2: #c3c2b7; --muted: #8f8e88; --grid: #2e2e2c;
+  --aligned: #3987e5; --rotated: #d95926; --near: #199e70; --box: #f0efec; --ceil: #5c5b57;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface); color: var(--text);
+       font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 860px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 18px; font-weight: 600; margin: 0 0 2px; }
+.sub { color: var(--text-2); margin: 0 0 12px; word-break: break-all; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+.controls input { width: 7em; font: inherit; padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px;
+                  background: var(--surface); color: var(--text); }
+.controls button { font: inherit; padding: 5px 12px; border: 1px solid var(--border); border-radius: 6px;
+                   background: var(--surface-2); color: var(--text); cursor: pointer; }
+.controls button:disabled { opacity: .45; cursor: default; }
+.controls .hint { color: var(--muted); font-size: 12px; }
+#info { font-variant-numeric: tabular-nums; color: var(--text-2); min-height: 2.9em; margin-bottom: 6px; }
+#info b { color: var(--text); font-weight: 600; }
+#plot { width: 100%; aspect-ratio: 1 / 1; }
+#scores { width: 100%; height: 260px; margin-top: 8px; }
+.note { color: var(--muted); font-size: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Squares in Squares: packing viewer</h1>
+  <p class="sub">source: examples.csv · <span id="count"></span></p>
+  <div class="controls">
+    <button id="prev" title="previous n (←)">‹ prev</button>
+    <label for="n">n</label>
+    <input id="n" type="number" min="1" max="1000" step="1" inputmode="numeric">
+    <button id="go">show</button>
+    <button id="next" title="next n (→)">next ›</button>
+    <span class="hint">Enter to show · ←/→ to step · click the score plot to jump</span>
+  </div>
+  <div id="info"></div>
+  <div id="plot"></div>
+  <div id="scores"></div>
+  <p class="note">L = max(x-extent, y-extent) of all square corners, in float64. Overlaps are not checked:
+    the official metric is the only judge of validity.</p>
+</main>
+<script id="data" type="application/json">{"label":"examples.csv","total":29.972809301135218,"packings":{"4":{"L":2.434213562373095,"s":0.21710678118654747,"o":[0,0],"x":[0.5,0.5,1.5,1.727107],"y":[0.5,1.5,0.5,1.727107],"r":[3],"ra":[0.785398163],"q":[],"qa":[]},"5":{"L":2.7071067821865475,"s":0.21065495746396734,"o":[0,0],"x":[0.5,2.207107,0.5,2.207107,1.353553],"y":[0.5,0.5,2.207107,2.207107,1.353553],"r":[4],"ra":[0.785398163],"q":[],"qa":[]},"6":{"L":3.333427256000885,"s":0.3608659786480073,"o":[-0.047169938,-0.047169938],"x":[0.5,0.5,1.62,1.62,2.74,2.74],"y":[0.5,1.62,0.5,1.62,0.5,1.62],"r":[0,1,2,3,4,5],"ra":[-0.0994441999,-0.0631654784,0.0723058716,0.0197188887,-0.0974091259,-0.0160495343],"q":[],"qa":[]},"7":{"L":3.0,"s":0.1338934190276817,"o":[0,0],"x":[0.5,0.5,0.5,1.5,1.5,2.5,2.5],"y":[0.5,1.5,2.5,0.5,2.5,1.5,2.5],"r":[],"ra":[],"q":[],"qa":[]},"8":{"L":4.5,"s":0.5909902576697319,"o":[0,0],"x":[0.5,1.5,2.5,3.5,1,2,3,4],"y":[0.5,0.5,0.5,0.5,1.5,1.5,1.5,1.5],"r":[],"ra":[],"q":[],"qa":[]},"9":{"L":3.8477017178629542,"s":0.2825672392876515,"o":[-0.422350859,-0.422350859],"x":[0.90323,0.560868,0.218506,1.843862,1.5015,1.159138,2.784494,2.442132,2.09977],"y":[0.218506,1.159138,2.09977,0.560868,1.5015,2.442132,0.90323,1.843862,2.784494],"r":[0,1,2,3,4,5,6,7,8],"ra":[0.34906585,0.34906585,0.34906585,0.34906585,0.34906585,0.34906585,0.34906585,0.34906585,0.34906585],"q":[],"qa":[]},"10":{"L":4.0,"s":0.26491106406735176,"o":[0,0],"x":[0.5,0.5,1.5,1.5,1.5,2.5,2.5,2.5,3.5,3.5],"y":[0.5,1.5,0.5,1.5,2.5,0.5,1.5,2.5,0.5,1.5],"r":[],"ra":[],"q":[],"qa":[]}}}</script>
+<script>
+const D = JSON.parse(document.getElementById("data").textContent);
+const P = D.packings;
+const NS = Object.keys(P).map(Number).sort((a, b) => a - b);
+const inp = document.getElementById("n"), info = document.getElementById("info");
+let cur = null;
+inp.min = NS[0]; inp.max = NS[NS.length - 1];
+document.getElementById("count").textContent = NS.length + " packings (n = " + NS[0] + "…" + NS[NS.length - 1]
+  + ") · total score " + D.total.toFixed(6) + " (missing n at the grid ceiling, overlaps not checked)";
+
+const css = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+const fx = (v, d) => Number(v).toFixed(d);
+const ceilScore = n => Math.ceil(Math.sqrt(n) - 1e-12) / Math.sqrt(n) - 1;
+
+function hexA(hex, a) {
+  const h = hex.replace("#", "");
+  const [r, g, b] = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16));
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+// same corner order as the official metric (compute_corners_float)
+function polys(e, idx, ang) {
+  const X = [], Y = [];
+  for (const k of idx) {
+    const x = e.x[k], y = e.y[k], a = ang.get(k) || 0, c = Math.cos(a), s = Math.sin(a);
+    const dx1 = 0.5 * c - 0.5 * s, dy1 = 0.5 * s + 0.5 * c, dx2 = -0.5 * c - 0.5 * s, dy2 = -0.5 * s + 0.5 * c;
+    X.push(x + dx1, x + dx2, x - dx1, x - dx2, x + dx1, null);
+    Y.push(y + dy1, y + dy2, y - dy1, y - dy2, y + dy1, null);
+  }
+  return [X, Y];
+}
+
+function draw(n) {
+  const e = P[n];
+  if (!e) {
+    info.innerHTML = `<b>n = ${n}</b> is not in this file`;
+    return;
+  }
+  cur = n;
+  inp.value = n;
+  history.replaceState(null, "", "#n=" + n);
+  document.getElementById("prev").disabled = n <= NS[0];
+  document.getElementById("next").disabled = n >= NS[NS.length - 1];
+
+  const ang = new Map(), rot = new Set(e.r), near = new Set(e.q);
+  e.r.forEach((k, i) => ang.set(k, e.ra[i]));
+  e.q.forEach((k, i) => ang.set(k, e.qa[i]));
+  const all = [...Array(e.x.length).keys()], al = all.filter(k => !rot.has(k) && !near.has(k));
+  const kind = k => near.has(k) ? "nearly aligned" : rot.has(k) ? "rotated" : "axis-aligned";
+  const gs = ceilScore(n);
+  info.innerHTML = `<b>n = ${n}</b> · L = <b>${fx(e.L, 12)}</b> · score_n = <b>${fx(e.s, 12)}</b>`
+    + ` · grid ceiling ${fx(gs, 6)} (gain ${fx(gs - e.s, 6)})`
+    + `<br>rotated squares: <b>${e.r.length}</b> / ${e.x.length}`
+    + (e.q.length ? ` · nearly aligned (|angle mod π/2| < 1e-3 rad): <b>${e.q.length}</b>` : "");
+
+  const text = css("--text-2"), grid = css("--grid"), traces = [];
+  for (const [idx, col, name] of [[al, css("--aligned"), "axis-aligned"],
+                                   [e.q, css("--near"), "nearly aligned, < 1e-3 rad"],
+                                   [e.r, css("--rotated"), "rotated"]]) {
+    const [X, Y] = polys(e, idx, ang);
+    traces.push({type: "scatter", mode: "lines", x: X, y: Y, fill: "toself", fillcolor: hexA(col, 0.35),
+                 line: {color: col, width: 1}, name: `${name} (${idx.length})`, hoverinfo: "skip",
+                 visible: idx.length ? true : "legendonly"});
+  }
+  const o = e.o, L = e.L;
+  traces.push({type: "scatter", mode: "lines", name: "bounding square", hoverinfo: "skip",
+               x: [o[0], o[0] + L, o[0] + L, o[0], o[0]], y: [o[1], o[1], o[1] + L, o[1] + L, o[1]],
+               line: {color: css("--box"), width: 1.5}});
+  traces.push({type: "scatter", mode: "markers", x: e.x, y: e.y, showlegend: false, name: "",
+               marker: {size: e.x.length > 300 ? 2 : 4, color: text, opacity: 0.6},
+               customdata: all.map(k => [k, ang.get(k) || 0, (ang.get(k) || 0) * 180 / Math.PI, kind(k)]),
+               hovertemplate: "square_id %{customdata[0]} (%{customdata[3]})<br>angle %{customdata[1]:.9g} rad"
+                 + " = %{customdata[2]:.4f}°<br>centre (%{x}, %{y})<extra></extra>"});
+  const pad = Math.max(0.15, 0.03 * L);
+  const ax = lo => ({range: [lo - pad, lo + L + pad], gridcolor: grid, zerolinecolor: grid,
+                     color: text, tickfont: {size: 11}, constrain: "domain"});
+  Plotly.react("plot", traces, {
+    xaxis: ax(o[0]), yaxis: Object.assign(ax(o[1]), {scaleanchor: "x", scaleratio: 1}),
+    margin: {l: 40, r: 10, t: 10, b: 30}, paper_bgcolor: css("--surface"), plot_bgcolor: css("--surface"),
+    font: {color: text}, hovermode: "closest", hoverdistance: 30,
+    legend: {orientation: "h", x: 0, y: 1.0, yanchor: "bottom", font: {color: text}},
+    hoverlabel: {bgcolor: css("--surface-2"), bordercolor: css("--border"), font: {color: css("--text")}},
+  }, {responsive: true, displaylogo: false, scrollZoom: true});
+  drawScores();
+}
+
+function drawScores() {
+  const text = css("--text-2"), grid = css("--grid");
+  const traces = [
+    {type: "scatter", mode: "lines", x: NS, y: NS.map(ceilScore), name: "grid ceiling", hoverinfo: "skip",
+     line: {color: css("--ceil"), width: 1}},
+    {type: "scatter", mode: "lines+markers", x: NS, y: NS.map(n => P[n].s), name: "score_n",
+     line: {color: css("--aligned"), width: 1.5}, marker: {size: 3},
+     hovertemplate: "n = %{x}<br>score_n = %{y:.9f}<extra></extra>"},
+    {type: "scatter", mode: "markers", x: [cur], y: [P[cur].s], name: "n = " + cur, hoverinfo: "skip",
+     marker: {size: 10, color: css("--rotated"), symbol: "circle-open", line: {width: 2}}},
+  ];
+  Plotly.react("scores", traces, {
+    xaxis: {title: {text: "n", font: {size: 11}}, gridcolor: grid, zerolinecolor: grid, color: text},
+    yaxis: {title: {text: "score_n = L/√n − 1", font: {size: 11}}, gridcolor: grid, zerolinecolor: grid, color: text},
+    margin: {l: 55, r: 10, t: 10, b: 40}, paper_bgcolor: css("--surface"), plot_bgcolor: css("--surface"),
+    font: {color: text}, hovermode: "closest", showlegend: false,
+  }, {responsive: true, displaylogo: false});
+}
+
+function step(d) {
+  if (cur === null) return;
+  const i = NS.indexOf(cur) + d;
+  if (i >= 0 && i < NS.length) draw(NS[i]);
+}
+function go() {
+  const n = parseInt(inp.value, 10);
+  if (Number.isInteger(n)) draw(n);
+}
+document.getElementById("go").onclick = go;
+document.getElementById("prev").onclick = () => step(-1);
+document.getElementById("next").onclick = () => step(1);
+inp.addEventListener("keydown", ev => { if (ev.key === "Enter") go(); });
+document.addEventListener("keydown", ev => {
+  if (ev.target === inp) return;
+  if (ev.key === "ArrowLeft") step(-1);
+  if (ev.key === "ArrowRight") step(1);
+});
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => cur !== null && draw(cur));
+
+if (typeof Plotly === "undefined") {
+  info.textContent = "plotly.js did not load (this page was built with the CDN version and needs network access).";
+} else {
+  const h = /n=(\d+)/.exec(location.hash);
+  draw(h && P[+h[1]] ? +h[1] : NS[0]);
+  document.getElementById("scores").on("plotly_click", ev => ev.points.length && draw(ev.points[0].x));
+}
+</script>
+</body>
+</html>

@@ -2,4 +2,4 @@
 from .viewer import PackingViewer, load_submission, score_n, side_length, main  # noqa: F401
 
 __version__ = "0.1.0"
-__all__ = ["PackingViewer", "load_submission", "score_n", "side_length", "main"]
+__all__ = ["PackingViewer", "load_submission", "score_n", "side_length", "main"]  # static previews: squares_in_squares_vis.static

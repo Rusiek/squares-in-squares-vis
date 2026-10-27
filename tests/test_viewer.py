@@ -68,3 +68,13 @@ def test_figure(tiny):
     assert [t.name for t in fig.data][:3] == ["axis-aligned (4)", "nearly aligned (< 1e-3 rad) (0)", "rotated (1)"]
 
 
+
+
+def test_static_previews(tiny, tmp_path):
+    import matplotlib
+    matplotlib.use("Agg")
+    from squares_in_squares_vis import static
+    v = pv.PackingViewer(tiny, tmp_path / "o.html")
+    fig = static.draw(v, 5, show=False)
+    assert fig.axes[0].get_title().startswith("n = 5")
+    assert static.draw_scores(v, show=False).axes[0].get_xlabel() == "n"

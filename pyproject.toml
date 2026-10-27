@@ -16,7 +16,8 @@ classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :
 dependencies = ["numpy>=1.26", "pandas>=2.2.2", "plotly>=5.18"]
 
 [project.optional-dependencies]
-test = ["pytest>=8"]
+preview = ["matplotlib>=3.8"]
+test = ["pytest>=8", "matplotlib>=3.8"]
 
 [project.scripts]
 sis-vis = "squares_in_squares_vis.viewer:main"
