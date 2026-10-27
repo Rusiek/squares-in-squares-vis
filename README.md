@@ -14,6 +14,7 @@ corners), computed in float64 rather than mpmath.
 
 - Full competition baseline (1000 grid packings, the official `sample_submission.csv`): **https://rusiek.github.io/squares-in-squares-vis/**
 - Tiny example with a rotated square (Göbel's n = 5, L = 2 + 1/√2): **https://rusiek.github.io/squares-in-squares-vis/goebel.html** (deep link to a puzzle: append `#n=5`)
+- Seven small, valid but deliberately suboptimal packings, n = 4…10 (`docs/examples.csv`): **https://rusiek.github.io/squares-in-squares-vis/examples.html**
 
 Both pages are exactly what `sis-vis` produces (`--cdn` variant); sources in `docs/`.
 
@@ -52,6 +53,13 @@ v.show_scores()    # score_n over n
 ```
 
 Input: the competition's CSV format (`id,n,square_id,x,y,angle`, angle in radians, unit squares).
+
+## Static previews (notebooks)
+
+```python
+from squares_in_squares_vis.static import draw, draw_scores   # pip install "squares-in-squares-vis[preview]"
+draw(v, 5); draw_scores(v)                                     # matplotlib figures, render in any saved notebook
+```
 
 ## Develop
 
